@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohit</title>
+  <style>
+    /* Reset and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url('pexels-pixabay-209831.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      margin: auto;
+      padding: 30px;
+      max-width: 450px;
+      width: 90%;
+      background: rgba(0, 0, 0, 0.7); 
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: calc(100% - 20px);
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 12px 30px;
+      background-color: #00c6ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0078ff;
+    }
+
+    .weather-info {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .weather-info p {
+      font-size: 1.1rem;
+      margin: 5px 0;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      margin-top: auto;
+      font-size: 0.9rem;
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    footer a {
+      color: #00c6ff;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .social-icons {
+      margin-top: 5px;
+    }
+
+    .social-icons a {
+      display: inline-block;
+      margin: 0 5px;
+      font-size: 1.2rem;
+      color: #00c6ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: #0078ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌤️ Weather Forecaster</h1>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button id="search">Get Weather</button>
+    <div class="weather-info" id="weather-info">
+      <h2 id="city-name"></h2>
+      <p id="temperature"></p>
+      <p id="description"></p>
+      <p id="humidity"></p>
+      <p id="wind-speed"></p>
+    </div>
+  </div>
+
+  <footer>
+    <p>All rights reserved by <a href="#">Rohit Verma</a>.©2024</p>
+    <div class="social-icons">
+      <a href="https://github.com/itzzrohit" target="_blank" title="GitHub Profile">GitHub</a>
+      <a href="https://www.linkedin.com/in/rohit-verma-11563524b/" target="_blank" title="LinkedIn Profile">LinkedIn</a>
+    </div>
+  </footer>
+
+  <!-- Rainfall sound effect -->
+  <audio id="rain-sound" autoplay loop>
+    <source src="heavy-rain-71786.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const API_KEY = "7746806e46ebdd9864502b5d12c13d12"; 
+
+    const searchBtn = document.getElementById('search');
+    const cityInput = document.getElementById('city');
+    const weatherInfo = document.getElementById('weather-info');
+
+    const cityName = document.getElementById('city-name');
+    const temperature = document.getElementById('temperature');
+    const description = document.getElementById('description');
+    const humidity = document.getElementById('humidity');
+    const windSpeed = document.getElementById('wind-speed');
+
+    searchBtn.addEventListener('click', async () => {
+      const city = cityInput.value.trim(); // Trim whitespace to avoid input errors
+      if (!city) {
+        alert("Please enter a city name.");
+        return;
+      }
+
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("City not found. Please try again.");
+        }
+
+        const data = await response.json();
+
+        // Populate weather details
+        cityName.textContent = `Weather in ${data.name}`;
+        temperature.textContent = `Temperature: ${data.main.temp}°C`;
+        description.textContent = `Condition: ${data.weather[0].description}`;
+        humidity.textContent = `Humidity: ${data.main.humidity}%`;
+        windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+
+        weatherInfo.style.display = "block"; // Show the weather info section
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  </script>
+</body>
+</html>
